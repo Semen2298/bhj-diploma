@@ -12,6 +12,12 @@ class TransactionsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
+    if (!element) {
+      throw new Error('Не передан элемент');
+    }
+
+    this.element = element;
+    this.registerEvents();
 
   }
   /**
@@ -21,6 +27,5 @@ class TransactionsWidget {
    * экземпляра окна
    * */
   registerEvents() {
-
   }
 }
