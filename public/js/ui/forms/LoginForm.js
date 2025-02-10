@@ -21,8 +21,7 @@ class LoginForm extends AsyncForm {
 
       this.element.reset();
       App.setState('user-logged');
-      this.closeModal('login');
+      App.getModal('login').close();
     });
-
   }
 }

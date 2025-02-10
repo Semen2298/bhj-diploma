@@ -15,10 +15,7 @@ class UserWidget {
     if (!element) {
       throw new Error('Не передан элемент');
     }
-
     this.element = element;
-    this.userName = this.element.querySelector('.user-name');
-
   }
 
   /**
@@ -28,18 +25,15 @@ class UserWidget {
    * в элемент .user-name устанавливает имя
    * авторизованного пользователя
    * */
-  update(){
-    const userData = User.current();
-
-    if (!userData) {
-      return;
+  update() {
+    const user = User.current();
+    if (user) {
+      const userNameElement = this.element.querySelector(".user-name");
+      if (userNameElement) {
+        userNameElement.textContent = user.name;
+      } else {
+        console.warn("UserWidget: Элемент .user-name не найден");
+      }
     }
-
-    if (!this.userName) {
-      return;
-    }
-
-    this.userName.innerHTML = userData.name;
-
   }
 }

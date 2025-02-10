@@ -11,16 +11,18 @@ class CreateAccountForm extends AsyncForm {
   onSubmit(data) {
     Account.create(data, (err, res) => {
       if (err) {
-        throw new Error(err);
-      }
-
-      if (!res.success) {
+        console.error('Ошибка при создании счета:', err);
         return;
       }
-
-      this.closeModal('createAccount');
+  
+      if (!res.success) {
+        console.warn('Не удалось создать счёт', res.success);
+        return;
+      }
+  
+      App.getModal('createAccount').close();
+      App.update();
       this.element.reset();
-      App.update()
     });
   }
 }

@@ -12,17 +12,17 @@ class RegisterForm extends AsyncForm {
   onSubmit(data) {
     User.register(data, (err, res) => {
       if (err) {
-        throw new Error(err);
-      }
-
-      if (!res.success) {
+        console.error(err);
         return;
       }
 
+      if (!res || !res.success) {
+        console.warn("Ошибка регистрации:", res?.error || "Неизвестная ошибка");
+        return;
+      }
       this.element.reset();
       App.setState('user-logged');
-      this.closeModal('register');
+      App.getModal('register').close();
     });
-
   }
 }

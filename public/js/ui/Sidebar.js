@@ -40,29 +40,30 @@ class Sidebar {
     const btnRegister = document.querySelector(".menu-item_register");
     const btnLogin = document.querySelector(".menu-item_login");
     const btnLogout = document.querySelector(".menu-item_logout");
-  
-    // Открытие модального окна для регистрации
-    btnRegister.addEventListener("click", (e) => {
-      e.preventDefault();
-      const registerModal = App.getModal("register");
-      registerModal.open();
-    });
-  
-    // Открытие модального окна для входа
-    btnLogin.addEventListener("click", (e) => {
-      e.preventDefault();
-      const loginModal = App.getModal("login");
-      loginModal.open();
-    });
-  
-    // Выход из системы
-    btnLogout.addEventListener("click", (e) => {
-      e.preventDefault();
-      User.logout((err, response) => {
-        if (response && response.success) {
-          App.setState("init");
-        }
+
+    if (btnRegister) {
+      btnRegister.addEventListener("click", (e) => {
+        e.preventDefault();
+        App.getModal("register").open();
       });
-    });
+    }
+
+    if (btnLogin) {
+      btnLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        App.getModal("login").open();
+      });
+    }
+
+    if (btnLogout) {
+      btnLogout.addEventListener("click", (e) => {
+        e.preventDefault();
+        User.logout((err, response) => {
+          if (response && response.success) {
+            App.setState("init");
+          }
+        });
+      });
+    }
   }
 }

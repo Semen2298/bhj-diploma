@@ -9,10 +9,7 @@ class CreateTransactionForm extends AsyncForm {
    * */
   constructor(element) {
     super(element);
-    this.parent = element.closest('.modal');
-    this.accountsList = this.element.querySelector('[name="account_id"]');
     this.renderAccountsList();
-
   }
 
   /**
@@ -20,30 +17,13 @@ class CreateTransactionForm extends AsyncForm {
    * Обновляет в форме всплывающего окна выпадающий список
    * */
   renderAccountsList() {
-    if (!this.accountsList) {
-      return;
-    }
-
-    Account.list({}, (err, res) => {
-      if (err) {
-        throw new Error(err);
-      }
-
-      if (!res.success || res.data.length === 0) {
-        return;
-      }
-
-      const markup = res.data.reduce((prev, item) => prev + this.getAccountHtml(item), '');
-
-      this.accountsList.innerHTML = markup;
+    Account.list(null, (err, response) => {
+      if (err || !response.success) return;
+      const select = this.element.querySelector(".accounts-select");
+      select.innerHTML = response.data
+        .map((account) => `<option value="${account.id}">${account.name}</option>`)
+        .join("");
     });
-
-  }
-
-  getAccountHtml(data) {
-    return `
-    <option value="${data.id}">${data.name}</option>
-    `;
   }
 
   /**
@@ -53,17 +33,10 @@ class CreateTransactionForm extends AsyncForm {
    * в котором находится форма
    * */
   onSubmit(data) {
-    Transaction.create(data, (err, res) => {
-      if (err) {
-        throw new Error(err);
-      }
-
-      if (!res.success) {
-        return;
-      }
-
+    Transaction.create(data, (err, response) => {
+      if (err || !response.success) return;
       this.element.reset();
-      this.closeModal(this.parent.dataset.modalId);
+      App.getModal(this.element.closest(".modal").dataset.modalId).close();
       App.update();
     });
   }
